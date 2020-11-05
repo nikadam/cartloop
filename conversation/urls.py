@@ -4,6 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'chat', views.ChatView)
+router.register(r'conversation', views.ConversationView)
 
 
 urlpatterns = [

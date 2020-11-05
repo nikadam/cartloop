@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 
 from .models import Chat, Conversation, ScheduleChat
-from .serializers import ChatSerializer
+from .serializers import ChatSerializer, ConversationSerializer
 
 
 class ChatView(viewsets.ModelViewSet):
@@ -39,3 +39,8 @@ class ChatView(viewsets.ModelViewSet):
         else:
             return Response({"message": "Conversation Id not found"}, status=status.HTTP_400_BAD_REQUEST)
         return super().create(request)
+
+
+class ConversationView(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer

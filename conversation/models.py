@@ -115,3 +115,20 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"{self.conversation}"
+
+
+class ScheduleChat(models.Model):
+    conversation = models.ForeignKey(
+                    'Conversation',
+                    on_delete=models.CASCADE,
+                    related_name='schedule_chats'
+                )
+    chat = models.ForeignKey(
+                'Chat',
+                on_delete=models.CASCADE,
+                related_name='schedule_chats'
+            )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.conversation}"

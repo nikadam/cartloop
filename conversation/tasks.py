@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from datetime import datetime
 from celery import shared_task
 
@@ -8,11 +9,17 @@ SENT = 'S'
 
 @shared_task(bind=True,
              name='send_emails',
-             max_retries=3,
-             soft_time_limit=20)
+             max_retries=3)
 def send_emails(total):
     if 9 < datetime.now().hour < 20:
-        conversations = Conversation.objects.filter(chats__status=NEW).distinct()
-        for conv in conversations:
-            chat_ids = Chat.objects.filter(conversation=conv, status=NEW).order_by('create_at')[:90].values_list('id', flat=True)
-            Chat.objects.filter(id__in=chat_ids).update(status=SENT)
+        for conv in Conversation.objects.filter(chats__status=NEW).distinct():
+            for chat in Chat.objects.filter(conversation=conv, status=NEW).order_by('create_at')[:90]:
+                send_mail(
+                    'Notification for chat',
+                    chat.payload,
+                    chat.user.email,
+                    [chat.conversation.operator.email if chat.conversation.client.id == chat.user.id else chat.conversation.operator.email],
+                    fail_silently=False
+                )
+                chat.status = SENT
+                chat.save()

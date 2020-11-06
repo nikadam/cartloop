@@ -137,3 +137,13 @@ REST_FRAMEWORK = {
 }
 
 CELERY_BROKER_URL = 'amqp://localhost'
+
+#for email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'xxxx'
+EMAIL_HOST_PASSWORD = 'xxxx'
+EMAIL_PORT = 587
+
+ADMIN_EMAIL = 'admin@mailinator.com'
